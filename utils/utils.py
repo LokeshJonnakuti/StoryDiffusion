@@ -5,10 +5,11 @@ import gradio as gr
 import numpy as np
 from PIL import Image,ImageOps,ImageDraw, ImageFont
 from io import BytesIO
-import random
+import secrets
+
 MAX_COLORS = 12
 def get_random_bool():
-    return random.choice([True, False])
+    return secrets.choice([True, False])
 
 def add_white_border(input_image, border_width=10):
     """
@@ -179,7 +180,7 @@ def get_row_image2(images,captions = None, font = None):
         sequence_list = [1,1,2]
     else:
         raise ValueError("images nums is not 4 or 6 found",len(images))
-    random.shuffle(sequence_list)
+    secrets.SystemRandom().shuffle(sequence_list)
     index = 0
     for length in sequence_list:
         if length == 1:

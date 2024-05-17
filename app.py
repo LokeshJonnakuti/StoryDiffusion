@@ -4,7 +4,6 @@ import numpy as np
 import spaces
 import torch
 import requests
-import random
 import os
 import sys
 import pickle
@@ -12,6 +11,8 @@ from PIL import Image
 from tqdm.auto import tqdm
 from datetime import datetime
 from utils.gradio_utils import is_torch2_available
+import secrets
+
 if is_torch2_available():
     from utils.gradio_utils import \
         AttnProcessor2_0 as AttnProcessor
@@ -50,7 +51,7 @@ def setup_seed(seed):
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     np.random.seed(seed)
-    random.seed(seed)
+    secrets.SystemRandom().seed(seed)
     torch.backends.cudnn.deterministic = True
 def set_text_unfinished():
     return gr.update(visible=True, value="<h3>(Not Finished) Generating ···  The intermediate results will be shown.</h3>")
@@ -112,7 +113,7 @@ class SpatialAttnProcessor2_0(torch.nn.Module):
         if cur_step <5:
             hidden_states = self.__call2__(attn, hidden_states,encoder_hidden_states,attention_mask,temb)
         else:   # 256 1024 4096
-            random_number = random.random()
+            random_number = secrets.SystemRandom().random()
             if cur_step <20:
                 rand_num = 0.3
             else:

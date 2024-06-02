@@ -90,7 +90,8 @@ def add_caption(image, text, position = "bottom-mid",  font = None, text_color= 
     
     return image.convert('RGB')
 
-def get_comic(images,types = "4panel",captions = [],font = None,pad_image = None):
+def get_comic(images,types = "4panel",captions = None,font = None,pad_image = None):
+    captions = [] if captions is None else captions
     if pad_image == None:
         pad_image = Image.open("./images/pad_images.png")
 
@@ -101,7 +102,8 @@ def get_comic(images,types = "4panel",captions = [],font = None,pad_image = None
     else: # "Classic Comic Style"
         return get_comic_classical(images,captions,font,pad_image)
 
-def get_caption_group(images_groups,captions = []):
+def get_caption_group(images_groups,captions = None):
+    captions = [] if captions is None else captions
     caption_groups = []
     for i in range(len(images_groups)):
         length = len(images_groups[i])
@@ -129,7 +131,8 @@ def get_comic_classical(images,captions = None,font = None,pad_image = None):
 
 
 
-def get_comic_4panel(images,captions = [],font = None,pad_image = None):
+def get_comic_4panel(images,captions = None,font = None,pad_image = None):
+    captions = [] if captions is None else captions
     if pad_image == None:
         raise ValueError("pad_image is None")
     pad_image = pad_image.resize(images[0].size, Image.LANCZOS)

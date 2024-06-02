@@ -257,7 +257,7 @@ class PhotoMakerStableDiffusionXLPipeline(StableDiffusionXLPipeline):
         callback: Optional[Callable[[int, int, torch.FloatTensor], None]] = None,
         callback_steps: int = 1,
         callback_on_step_end: Optional[Callable[[int, int, Dict], None]] = None,
-        callback_on_step_end_tensor_inputs: List[str] = ["latents"],
+        callback_on_step_end_tensor_inputs: Optional[List[str]] = None,
         # Added parameters (for PhotoMaker)
         input_id_images: PipelineImageInput = None,
         start_merge_step: int = 0, # TODO: change to `style_strength_ratio` in the future
@@ -288,6 +288,7 @@ class PhotoMakerStableDiffusionXLPipeline(StableDiffusionXLPipeline):
             [`~pipelines.stable_diffusion_xl.StableDiffusionXLPipelineOutput`] if `return_dict` is True, otherwise a
             `tuple`. When returning a tuple, the first element is a list with the generated images.
         """
+        callback_on_step_end_tensor_inputs = ["latents"] if callback_on_step_end_tensor_inputs is None else callback_on_step_end_tensor_inputs
         # 0. Default height and width to unet
         height = height or self.unet.config.sample_size * self.vae_scale_factor
         width = width or self.unet.config.sample_size * self.vae_scale_factor

@@ -2,10 +2,10 @@ from calendar import c
 from operator import invert
 from webbrowser import get
 import torch
-import random
 import torch.nn as nn
 import torch.nn.functional as F
 import gradio as gr
+import secrets
 
 class SpatialAttnProcessor2_0(torch.nn.Module):
     r"""
@@ -54,7 +54,7 @@ class SpatialAttnProcessor2_0(torch.nn.Module):
         if cur_step <5:
             hidden_states = self.__call2__(attn, hidden_states,encoder_hidden_states,attention_mask,temb)
         else:   # 256 1024 4096
-            random_number = random.random()
+            random_number = secrets.SystemRandom().random()
             if cur_step <20:
                 rand_num = 0.3
             else:

@@ -5,7 +5,6 @@ import torch
 import gc
 import copy
 import os
-import random
 import datetime
 from PIL import ImageFont
 from utils.gradio_utils import (
@@ -16,6 +15,7 @@ from utils.gradio_utils import (
     cal_attn_indice_xl_effcient_memory,
     is_torch2_available,
 )
+import secrets
 
 if is_torch2_available():
     from utils.gradio_utils import AttnProcessor2_0 as AttnProcessor
@@ -71,7 +71,7 @@ def setup_seed(seed):
     if device == "cuda":
         torch.cuda.manual_seed_all(seed)
     np.random.seed(seed)
-    random.seed(seed)
+    secrets.SystemRandom().seed(seed)
     torch.backends.cudnn.deterministic = True
 
 
@@ -194,7 +194,7 @@ class SpatialAttnProcessor2_0(torch.nn.Module):
                 attn, hidden_states, None, attention_mask, temb
             )
         else:  # 256 1024 4096
-            random_number = random.random()
+            random_number = secrets.SystemRandom().random()
             if cur_step < 20:
                 rand_num = 0.3
             else:
@@ -1159,7 +1159,7 @@ with gr.Blocks(css=css) as demo:
     char_btn.click(fn=load_character_files, inputs=char_path, outputs=[general_prompt])
 
     randomize_seed_btn.click(
-        fn=lambda: random.randint(-1, MAX_SEED),
+        fn=lambda: secrets.SystemRandom().randint(-1, MAX_SEED),
         inputs=[],
         outputs=seed_,
     )

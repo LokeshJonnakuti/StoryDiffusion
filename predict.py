@@ -3,7 +3,6 @@
 
 import os
 import copy
-import random
 import subprocess
 import numpy as np
 import time
@@ -21,6 +20,7 @@ from utils.gradio_utils import (
 )  # with torch2 installed
 from utils.gradio_utils import cal_attn_mask_xl
 from utils.utils import get_comic
+import secrets
 
 MODEL_URL = "https://weights.replicate.delivery/default/HVision_NKU/StoryDiffusion.tar"
 MODEL_CACHE = "model_weights"
@@ -73,7 +73,7 @@ def setup_seed(seed):
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     np.random.seed(seed)
-    random.seed(seed)
+    secrets.SystemRandom().seed(seed)
     torch.backends.cudnn.deterministic = True
 
 
@@ -199,7 +199,7 @@ class SpatialAttnProcessor2_0(torch.nn.Module):
                 attn, hidden_states, encoder_hidden_states, attention_mask, temb
             )
         else:  # 256 1024 4096
-            random_number = random.random()
+            random_number = secrets.SystemRandom().random()
             if cur_step < 20:
                 rand_num = 0.3
             else:
